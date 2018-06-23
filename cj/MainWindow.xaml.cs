@@ -31,15 +31,11 @@ namespace cj
             InitializeComponent();
             conn.Init();
 
-            zcwresult();
-            //cjwresult();
+            //zcwresult();
+            caijingwang();
 
             //htmlRTB.AppendText(zhcw());
 
-        }
-        private void cjwresult()
-        {
-            caijingwang();
         }
         private void zcwresult()
         {
@@ -56,7 +52,7 @@ namespace cj
         }
         private string caijingwang()
         {
-            string url = "https://zst.cjcp.com.cn/cjwk3/view/kuai3_zonghe-jilin-3-3000.html";
+            string url = "https://zst.cjcp.com.cn/cjwk3/view/kuai3_zonghe-jilin-3-60000.html";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             req.AllowAutoRedirect = false;

@@ -67,15 +67,32 @@ namespace cj.Core
         {
             try
             {
+                List<string> qhList = new List<string>();
                 conn.Open();
                 cmd.Connection = conn;
                 SQLiteHelper sh = new SQLiteHelper(cmd);
                 var sql = string.Format("select * from fcjlk3 where jh={0}", jh);
                 DataTable dt = sh.Select(sql);
+
                 if (dt.Rows.Count != 0)
                 {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var qh1 = dr["qh"].ToString().Substring(0, 7);
+                        var qh2= (int.Parse(dr["qh"].ToString().Substring(8, 3)) + 1).ToString().PadLeft(3, '0');
+                        var qh = qh1 + qh2;
+                        qhList.Add(qh);
+                        //MessageBox.Show(dr["qh"].ToString());
+                        //MessageBox.Show(dr["jh"].ToString());
+                    }
+                    
+                    foreach (var l in qhList)
+                    {
+                        MessageBox.Show(l.ToString());
+                    }
                     return dt;
                 }
+                
                 else
                 {
                     return null;
