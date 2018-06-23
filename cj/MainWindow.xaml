@@ -1,0 +1,21 @@
+﻿<Window x:Class="cj.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:cj"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="768" Width="1024">
+    <Grid>
+        <RichTextBox Name="htmlRTB" HorizontalAlignment="Left" Height="320" Margin="375,275,0,0" VerticalAlignment="Top" Width="631">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="RichTextBox"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <DataGrid Name="dispDG" HorizontalAlignment="Left" Height="718" Margin="10,10,0,0" VerticalAlignment="Top" Width="345"/>
+        <Button Content="显示" HorizontalAlignment="Left" Margin="415,60,0,0" VerticalAlignment="Top" Width="75" Click="dispBtn_Click"/>
+
+    </Grid>
+</Window>
