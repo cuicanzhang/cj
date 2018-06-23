@@ -7,15 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="1024">
     <Grid>
-        <RichTextBox Name="htmlRTB" HorizontalAlignment="Left" Height="320" Margin="375,275,0,0" VerticalAlignment="Top" Width="631">
+        <RichTextBox Name="htmlRTB" HorizontalAlignment="Left" Height="165" Margin="375,430,0,0" VerticalAlignment="Top" Width="631">
             <FlowDocument>
                 <Paragraph>
-                    <Run Text="RichTextBox"/>
+                    <Run Text=""/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
         <DataGrid Name="dispDG" HorizontalAlignment="Left" Height="718" Margin="10,10,0,0" VerticalAlignment="Top" Width="345"/>
         <Button Content="显示" HorizontalAlignment="Left" Margin="415,60,0,0" VerticalAlignment="Top" Width="75" Click="dispBtn_Click"/>
+        <TextBox Name="searchStr" HorizontalAlignment="Left" Height="23" Margin="400,165,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Button Content="查询" HorizontalAlignment="Left" Margin="555,165,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 
     </Grid>
 </Window>

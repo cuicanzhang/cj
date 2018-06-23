@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,25 +31,32 @@ namespace cj
             InitializeComponent();
             conn.Init();
 
+            zcwresult();
+            //cjwresult();
 
+            //htmlRTB.AppendText(zhcw());
+
+        }
+        private void cjwresult()
+        {
+            caijingwang();
+        }
+        private void zcwresult()
+        {
             JObject init_result = JsonConvert.DeserializeObject(zhcw()) as JObject;
             foreach (JObject j in init_result["list"])
             {
-                string qh = j["issue"].ToString();
-                string jh = j["winNum"].ToString();
+                string qh = "20"+j["issue"].ToString();
+                string jh = j["winNum"].ToString().Replace(",", "");
 
                 Core.SqlAction.AddH(initDic(qh, jh));
                 //htmlRTB.AppendText("[ QH"+qh+"+  JH"+jh+"  ]插入完成");
                 //MessageBox.Show(qh+":"+jh);
             }
-
-            //htmlRTB.AppendText(zhcw());
-
         }
-
-        private string tempw()
+        private string caijingwang()
         {
-            string url = "http://www.km28.com/gp_chart/jlks/0/50.html";
+            string url = "https://zst.cjcp.com.cn/cjwk3/view/kuai3_zonghe-jilin-3-3000.html";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             req.AllowAutoRedirect = false;
@@ -56,7 +64,28 @@ namespace cj
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
             string html=new StreamReader (res.GetResponseStream()).ReadToEnd();
             //return html;
-            //MessageBox.Show(cookies);
+            //Regex reg = new Regex(@"\d{8,}</td><td class='z_bg_13'>\d{3,}");
+            //Match match = reg.Match(html);
+            string pattern = @"\d{8,}</td><td class='z_bg_13'>\d{3,}";
+            MatchCollection result = Regex.Matches(html, pattern);
+            //birthdayMonthCB.SelectedValue = match.Groups[1].Value;
+            //birthdayDayCB.SelectedValue = match.Groups[2].Value;
+            //MessageBox.Show(match.Groups[10].Value);
+            //MessageBox.Show(match.Groups[1].Value);
+            foreach(var str in result)
+            {
+                string[] sArray = Regex.Split(str.ToString(), "</td><td class='z_bg_13'>", RegexOptions.IgnoreCase);
+               // MessageBox.Show(sArray[0]);
+                //MessageBox.Show(sArray[1]);
+
+                string qh = sArray[0].ToString();
+                string jh = sArray[1].ToString();
+
+                Core.SqlAction.AddH(initDic(qh, jh));
+
+            }
+
+
             return html;
 
         }
@@ -99,6 +128,12 @@ namespace cj
         private void dispBtn_Click(object sender, RoutedEventArgs e)
         {
             dispDG.ItemsSource = Core.SqlAction.SelectH("").DefaultView;
+            dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            dispDG.ItemsSource = Core.SqlAction.SelectOH(searchStr.Text).DefaultView;
             dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
         }
     }

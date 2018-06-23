@@ -63,5 +63,36 @@ namespace cj.Core
             }
 
         }
+        public static DataTable SelectOH(string jh)
+        {
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                SQLiteHelper sh = new SQLiteHelper(cmd);
+                var sql = string.Format("select * from fcjlk3 where jh={0}", jh);
+                DataTable dt = sh.Select(sql);
+                if (dt.Rows.Count != 0)
+                {
+                    return dt;
+                }
+                else
+                {
+                    return null;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                DataTable dt = new DataTable();
+                return dt;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
     }
 }
