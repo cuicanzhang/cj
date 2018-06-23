@@ -88,7 +88,7 @@ namespace cj.Core
                     
                     foreach (var l in qhList)
                     {
-                        MessageBox.Show(l.ToString());
+                        //MessageBox.Show(l.ToString());
                     }
                     return dt;
                 }

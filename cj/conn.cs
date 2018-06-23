@@ -65,7 +65,7 @@ namespace  cj
             {
                 // Creating table....
                 SQLiteTable tb = new SQLiteTable(tableName);
-                //tb.Columns.Add(new SQLiteColumn("ID", ColType.Integer, true, true, true, ""));
+                tb.Columns.Add(new SQLiteColumn("ID", ColType.Integer, true, true, true, ""));
                 tb.Columns.Add(new SQLiteColumn("qh", ColType.Text));
                 tb.Columns.Add(new SQLiteColumn("jh", ColType.Text));
 

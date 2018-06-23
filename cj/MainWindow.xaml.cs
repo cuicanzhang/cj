@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -31,8 +32,8 @@ namespace cj
             InitializeComponent();
             conn.Init();
 
-            //zcwresult();
-            caijingwang();
+            zcwresult();
+            //caijingwang();
 
             //htmlRTB.AppendText(zhcw());
 
@@ -52,7 +53,7 @@ namespace cj
         }
         private string caijingwang()
         {
-            string url = "https://zst.cjcp.com.cn/cjwk3/view/kuai3_zonghe-jilin-3-60000.html";
+            string url = "https://zst.cjcp.com.cn/cjwk3/view/kuai3_zonghe-jilin-3-70000.html";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             req.AllowAutoRedirect = false;
@@ -68,18 +69,33 @@ namespace cj
             //birthdayDayCB.SelectedValue = match.Groups[2].Value;
             //MessageBox.Show(match.Groups[10].Value);
             //MessageBox.Show(match.Groups[1].Value);
-            foreach(var str in result)
+            using (SQLiteConnection conn = new SQLiteConnection(config.DataSource))
             {
-                string[] sArray = Regex.Split(str.ToString(), "</td><td class='z_bg_13'>", RegexOptions.IgnoreCase);
-               // MessageBox.Show(sArray[0]);
-                //MessageBox.Show(sArray[1]);
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    conn.Open();
+                    cmd.Connection = conn;
+                    SQLiteHelper sh = new SQLiteHelper(cmd);
+                    sh.BeginTransaction();
+                    foreach (var str in result)
+                    {
+                        string[] sArray = Regex.Split(str.ToString(), "</td><td class='z_bg_13'>", RegexOptions.IgnoreCase);
+                        // MessageBox.Show(sArray[0]);
+                        //MessageBox.Show(sArray[1]);
 
-                string qh = sArray[0].ToString();
-                string jh = sArray[1].ToString();
+                        string qh = sArray[0].ToString();
+                        string jh = sArray[1].ToString();
+                        sh.Insert("fcjlk3", initDic(qh, jh));
+                       // Core.SqlAction.AddH(initDic(qh, jh));
 
-                Core.SqlAction.AddH(initDic(qh, jh));
+                    }
+                    sh.Commit();
 
+                    conn.Close();
+                }
             }
+
+            
 
 
             return html;
@@ -100,8 +116,8 @@ namespace cj
             //string html=new StreamReader (res.GetResponseStream()).ReadToEnd();
             //return html;
             //MessageBox.Show(cookies);
-            string jsonUrl = "http://data.zhcw.com/port/client_json.php?transactionType=10120105&type=zongzs&daytime=today&timeId=-1";
-            //string jsonUrl = "http://data.zhcw.com/port/client_json.php?transactionType=10120105&type=zongzs&period=2000&timeId=-1";
+            //string jsonUrl = "http://data.zhcw.com/port/client_json.php?transactionType=10120105&type=zongzs&daytime=today&timeId=-1";
+            string jsonUrl = "http://data.zhcw.com/port/client_json.php?transactionType=10120105&type=zongzs&period=100&timeId=-1";
             HttpWebRequest req1 = (HttpWebRequest)WebRequest.Create(jsonUrl);
             req1.Method = "GET";
             req1.AllowAutoRedirect = false;
