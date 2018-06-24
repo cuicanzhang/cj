@@ -61,6 +61,29 @@ namespace cj.Core
             {
                 conn.Close();
             }
+        }
+        public static DataTable SelectToday()
+        {
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                SQLiteHelper sh = new SQLiteHelper(cmd);
+                var sql = string.Format("select qh, jh from fcjlk3  where qh like '{0}%' order by qh desc", DateTime.Now.ToString("yyyyMMdd"));
+                DataTable dt = sh.Select(sql);
+                return dt;
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                DataTable dt = new DataTable();
+                return dt;
+            }
+            finally
+            {
+                conn.Close();
+            }
 
         }
         public static DataTable SelectOH(string jh,string count)
@@ -177,6 +200,72 @@ namespace cj.Core
                         //MessageBox.Show(l.ToString());
                     }
                     */
+                    return dt;
+                }
+
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                DataTable dt = new DataTable();
+                return dt;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+        public static DataTable SelectNextID(string qh, string count)
+        {
+            try
+            {
+                if (count == "")
+                {
+                    count = "2500";
+                }
+                
+                List<string> qhList = new List<string>();
+                List<string> IDList = new List<string>();
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                conn.Open();
+                cmd.Connection = conn;
+                SQLiteHelper sh = new SQLiteHelper(cmd);
+                //var sql = string.Format("select qh,jh from fcjlk3 where jh={0} order by ID desc limit 0,{1}", jh,count);
+                var sql = string.Format("select jh from fcjlk3 where qh = {0}", qh);
+                DataTable dt = sh.Select(sql);
+
+                sql = string.Format("select ID from (select * from fcjlk3 order by ID desc limit 0, {0}) where jh = {1}", count, dt.Rows[0]["jh"].ToString());
+                dt = sh.Select(sql);
+                if (dt.Rows.Count != 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        //MessageBox.Show(dr["ID"].ToString());
+                        IDList.Add((int.Parse(dr["ID"].ToString()) + 1).ToString());                       
+                        //var qh1 = dr["qh"].ToString().Substring(0, 7);
+                        //var qh2= (int.Parse(dr["qh"].ToString().Substring(8, 3)) + 1).ToString().PadLeft(3, '0');
+                        //var qh = qh1 + qh2;
+                        //qhList.Add(qh);
+                        //MessageBox.Show(dr["qh"].ToString());
+                        //MessageBox.Show(dr["jh"].ToString());
+                    }
+                    dt.Clear();
+                    //sh.BeginTransaction();
+                    sql = "select qh,jh from fcjlk3  where ID = 0";
+                    foreach (var id in IDList)
+                    {
+                        sql += " or ID= " + id.ToString();
+                        
+                        //MessageBox.Show(l.ToString());
+                    }
+                    dt = sh.Select(sql+ " order by qh desc");
+                    //sh.Commit();
                     return dt;
                 }
 

@@ -7,21 +7,23 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="1024">
     <Grid>
-        <RichTextBox Name="htmlRTB" HorizontalAlignment="Left" Height="170" Margin="695,485,0,0" VerticalAlignment="Top" Width="296">
+        <RichTextBox Name="htmlRTB" HorizontalAlignment="Left" Height="170" Margin="850,400,0,0" VerticalAlignment="Top" Width="156">
             <FlowDocument>
                 <Paragraph>
                     <Run Text=""/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <DataGrid Name="dispDG"  CanUserAddRows="False" LoadingRow="DGLoadingRow"  FontSize="16" IsReadOnly="True" HorizontalAlignment="Left" Height="595" Margin="10,10,0,0" VerticalAlignment="Top" Width="260"/>
-        <Button Content="显示" HorizontalAlignment="Left" Margin="90,618,0,0" VerticalAlignment="Top" Width="75" Click="dispBtn_Click"/>
-        <TextBox Name="searchStr" PreviewKeyDown="checkNumber_PreviewKeyDown"  HorizontalAlignment="Left" Height="23" Margin="605,689,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button Content="查询" HorizontalAlignment="Left" Margin="745,690,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <DataGrid Name="dispDG"  CanUserAddRows="False" LoadingRow="DGLoadingRow" SelectionChanged="dispDG_SelectionChanged" FontSize="16" IsReadOnly="True" HorizontalAlignment="Left" Height="595" Margin="10,10,0,0" VerticalAlignment="Top" Width="260"/>
+        <Button Content="显示全部" HorizontalAlignment="Left" Margin="20,615,0,0" VerticalAlignment="Top" Width="75" Click="dispBtn_Click"/>
+        <Button Content="显示今天" HorizontalAlignment="Left" Margin="130,615,0,0" VerticalAlignment="Top" Width="75" Click="dispTodayBtn_Click"/>
+        <TextBox Name="searchStr" PreviewKeyDown="checkNumber_PreviewKeyDown"  HorizontalAlignment="Left" Height="23" Margin="865,662,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Button Content="查询" HorizontalAlignment="Left" Margin="910,690,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <Button Content="最近" HorizontalAlignment="Left" Margin="315,617,0,0" VerticalAlignment="Top" Width="50" Click="Button_Click_1"/>
         <DataGrid Name="CountDG"  FontSize="16" CanUserAddRows="False" LoadingRow="DGLoadingRow"  SelectionChanged="CountDG_SelectionChanged" IsReadOnly="True"  HorizontalAlignment="Left" Height="595" Margin="275,10,0,0" VerticalAlignment="Top" Width="260"/>
         <TextBox Name="qhCountTB"  PreviewKeyDown="checkNumber_PreviewKeyDown"  HorizontalAlignment="Left" Height="23" Margin="370,617,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55"/>
         <Label Content="期" HorizontalAlignment="Left" Margin="430,613,0,0" VerticalAlignment="Top"/>
+        <DataGrid Name="nextDG" CanUserAddRows="False" LoadingRow="DGLoadingRow" IsReadOnly="True"  FontSize="16"  HorizontalAlignment="Left" Height="595" Margin="540,10,0,0" VerticalAlignment="Top" Width="260"/>
 
     </Grid>
 </Window>

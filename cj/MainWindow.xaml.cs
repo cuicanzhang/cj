@@ -191,10 +191,68 @@ namespace cj
 
             }
         }
+        private void dispDG_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView mySelectedElement = (DataRowView)dispDG.SelectedItem;
+            if (mySelectedElement != null)
+            {
+                //MessageBox.Show(mySelectedElement[0].ToString());
+
+                nextDG.ItemsSource = Core.SqlAction.SelectNextID(mySelectedElement[0].ToString(), qhCountTB.Text).DefaultView;
+                nextDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+
+                
+                    CountDG.ItemsSource = showMaxCount(Core.SqlAction.SelectNextID(mySelectedElement[0].ToString(), qhCountTB.Text)).DefaultView;
+                    CountDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+
+               
+            }
+        }
         private void DGLoadingRow(object sender, DataGridRowEventArgs e)
         {
             //加载行
             e.Row.Header = e.Row.GetIndex() + 1;
+        }
+
+        private void dispTodayBtn_Click(object sender, RoutedEventArgs e)
+        {
+            dispDG.ItemsSource = Core.SqlAction.SelectToday().DefaultView;
+            dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+        }
+        private DataTable showMaxCount(DataTable dt)
+        {
+            Dictionary<string, JhCount> dic = new Dictionary<string, JhCount>();
+            if (dt.Rows.Count != 0)
+            {
+                // 集合 dic 用于存放统计结果
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dic.ContainsKey(dr["jh"].ToString()))
+                    {
+                        dic[dr["jh"].ToString()].RepeatNum += 1;
+                    }
+                    else
+                    {
+                        dic.Add(dr["jh"].ToString(), new JhCount(dr["jh"].ToString()));
+                    }
+
+                }
+                dt.Clear();
+
+                dt.Columns.Remove("qh");
+                dt.Columns.Remove("jh");
+
+                dt.Columns.Add("开奖号");
+                dt.Columns.Add("出现次数");
+
+                foreach (JhCount info in dic.Values)
+                {
+                    dt.Rows.Add(info.Value, info.RepeatNum.ToString().PadLeft(4, '0'));
+                }
+                return dt;
+            }
+            return null;
         }
     }
 }
