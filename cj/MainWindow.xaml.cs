@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -145,8 +146,55 @@ namespace cj
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            dispDG.ItemsSource = Core.SqlAction.SelectOH(searchStr.Text).DefaultView;
-            dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+            /*
+            if (searchStr.Text.Replace(" ", "") != "")
+            {
+                dispDG.ItemsSource = Core.SqlAction.SelectOH(searchStr.Text.Replace(" ", ""), qhCountTB.Text.Replace(" ", "")).DefaultView;
+                dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+            }
+             */   
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (qhCountTB.Text.Replace(" ", "") != "")
+            {
+                CountDG.ItemsSource = Core.SqlAction.SelectMaxCount(qhCountTB.Text.Replace(" ", "")).DefaultView;
+                CountDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+            
+            }
+            
+        }
+        private void checkNumber_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!Tools.isInputNumber(e))
+            {
+                //MessageBox.Show("请输入数字！");
+            }
+        }
+
+        private void CountDG_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+
+        }
+        private void CountDG_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView mySelectedElement = (DataRowView)CountDG.SelectedItem;
+            if (mySelectedElement != null)
+            {
+                if (qhCountTB.Text.Replace(" ", "") != "")
+                {
+                    dispDG.ItemsSource = Core.SqlAction.SelectOH(mySelectedElement[0].ToString(), qhCountTB.Text).DefaultView;
+                    dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+
+                }
+
+            }
+        }
+        private void DGLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            //加载行
+            e.Row.Header = e.Row.GetIndex() + 1;
         }
     }
 }

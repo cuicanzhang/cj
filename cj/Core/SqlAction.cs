@@ -47,7 +47,7 @@ namespace cj.Core
                 conn.Open();
                 cmd.Connection = conn;
                 SQLiteHelper sh = new SQLiteHelper(cmd);
-                string sql = "select * from fcjlk3";
+                string sql = "select qh,jh from fcjlk3";
                 DataTable dt = sh.Select(sql);
                 return dt;
             }
@@ -63,25 +63,28 @@ namespace cj.Core
             }
 
         }
-        public static DataTable SelectOH(string jh)
+        public static DataTable SelectOH(string jh,string count)
         {
             try
             {
                 List<string> qhList = new List<string>();
+                Dictionary<string,string> dic= new Dictionary<string, string>();
                 conn.Open();
                 cmd.Connection = conn;
                 SQLiteHelper sh = new SQLiteHelper(cmd);
-                var sql = string.Format("select * from fcjlk3 where jh={0}", jh);
+                //var sql = string.Format("select qh,jh from fcjlk3 where jh={0} order by ID desc limit 0,{1}", jh,count);
+                var sql = string.Format("select qh, jh from (select qh, jh from fcjlk3 order by ID desc limit 0, {0}) where jh = {1}",  count, jh);
                 DataTable dt = sh.Select(sql);
 
                 if (dt.Rows.Count != 0)
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                        var qh1 = dr["qh"].ToString().Substring(0, 7);
-                        var qh2= (int.Parse(dr["qh"].ToString().Substring(8, 3)) + 1).ToString().PadLeft(3, '0');
-                        var qh = qh1 + qh2;
-                        qhList.Add(qh);
+                        //MessageBox.Show((int.Parse(dr["ID"].ToString()) +1).ToString());
+                        //var qh1 = dr["qh"].ToString().Substring(0, 7);
+                        //var qh2= (int.Parse(dr["qh"].ToString().Substring(8, 3)) + 1).ToString().PadLeft(3, '0');
+                        //var qh = qh1 + qh2;
+                        //qhList.Add(qh);
                         //MessageBox.Show(dr["qh"].ToString());
                         //MessageBox.Show(dr["jh"].ToString());
                     }
@@ -98,6 +101,90 @@ namespace cj.Core
                     return null;
                 }
                 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                DataTable dt = new DataTable();
+                return dt;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+        public static DataTable SelectMaxCount(string count)
+        {
+            try
+            {
+                List<string> qhList = new List<string>();
+                Dictionary<string, JhCount> dic = new Dictionary<string, JhCount>();
+                conn.Open();
+                cmd.Connection = conn;
+                SQLiteHelper sh = new SQLiteHelper(cmd);
+                var sql = string.Format("select * from fcjlk3  order by ID desc limit 0,{0}",count);
+                DataTable dt = sh.Select(sql);
+
+                if (dt.Rows.Count != 0)
+                {
+                    // 集合 dic 用于存放统计结果
+                    
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (dic.ContainsKey(dr["jh"].ToString()))
+                        {
+                            dic[dr["jh"].ToString()].RepeatNum += 1;
+                        }
+                        else
+                        {
+                            // 数组元素首次出现，向集合中添加一个新项
+                            // 注意 ItemInfo类构造函数中，已经将重复
+                            // 次数设置为 1
+                            dic.Add(dr["jh"].ToString(), new JhCount(dr["jh"].ToString()));
+                        }
+                        
+                        //MessageBox.Show((int.Parse(dr["ID"].ToString()) + 1).ToString());
+                        //var qh1 = dr["qh"].ToString().Substring(0, 7);
+                        //var qh2= (int.Parse(dr["qh"].ToString().Substring(8, 3)) + 1).ToString().PadLeft(3, '0');
+                        //var qh = qh1 + qh2;
+                        //qhList.Add(qh);
+                        //MessageBox.Show(dr["qh"].ToString());
+                        //MessageBox.Show(dr["jh"].ToString());
+                    }
+                    //清空数据
+                    dt.Clear();
+                    //删除列 
+                    dt.Columns.Remove("ID");
+                    dt.Columns.Remove("qh");
+                    dt.Columns.Remove("jh");
+                    //调整列顺序 ，列排序从0开始  
+                    //dt.Columns["num"].SetOrdinal(1);
+                    //修改列标题名称  
+                    //dt.Columns["num"].ColumnName = "搜索量";
+                    //dt.Columns["rate"].ColumnName = "百分比";
+                    dt.Columns.Add("开奖号");
+                    dt.Columns.Add("出现次数");
+                    
+                    foreach (JhCount info in dic.Values )
+                    {
+                        //MessageBox.Show(string.Format("数组元素 {0} 出现的次数为 {1}", info.Value, info.RepeatNum));
+                        dt.Rows.Add(info.Value, info.RepeatNum.ToString().PadLeft(4, '0'));
+                    }
+                    /*
+                    foreach (var l in qhList)
+                    {
+                        //MessageBox.Show(l.ToString());
+                    }
+                    */
+                    return dt;
+                }
+
+                else
+                {
+                    return null;
+                }
+
             }
             catch (Exception ex)
             {
