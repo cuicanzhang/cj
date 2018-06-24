@@ -254,5 +254,12 @@ namespace cj
             }
             return null;
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            zcwresult();
+            dispDG.ItemsSource = Core.SqlAction.SelectH("").DefaultView;
+            dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+        }
     }
 }

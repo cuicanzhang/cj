@@ -24,6 +24,7 @@
         <TextBox Name="qhCountTB"  PreviewKeyDown="checkNumber_PreviewKeyDown"  HorizontalAlignment="Left" Height="23" Margin="370,617,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="55"/>
         <Label Content="期" HorizontalAlignment="Left" Margin="430,613,0,0" VerticalAlignment="Top"/>
         <DataGrid Name="nextDG" CanUserAddRows="False" LoadingRow="DGLoadingRow" IsReadOnly="True"  FontSize="16"  HorizontalAlignment="Left" Height="595" Margin="540,10,0,0" VerticalAlignment="Top" Width="260"/>
+        <Button Content="更新数据" HorizontalAlignment="Left" Margin="910,35,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
 
     </Grid>
 </Window>
