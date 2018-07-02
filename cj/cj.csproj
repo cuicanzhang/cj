@@ -65,6 +65,7 @@
     <Compile Include="Http\Entity\PassTicketEntity.cs" />
     <Compile Include="Http\LoginService.cs" />
     <Compile Include="JhCount.cs" />
+    <Compile Include="Number.cs" />
     <Compile Include="SQLiteHelper\SQLiteColumn.cs" />
     <Compile Include="SQLiteHelper\SQLiteColumnList.cs" />
     <Compile Include="SQLiteHelper\SQLiteHelper.cs" />

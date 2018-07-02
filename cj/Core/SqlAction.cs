@@ -287,5 +287,92 @@ namespace cj.Core
             }
 
         }
+
+        public static DataTable SelectMore(string count)
+        {
+            try
+            {
+                List<string> qhList = new List<string>();
+                Dictionary<string, Number> dic = new Dictionary<string, Number>();
+                conn.Open();
+                cmd.Connection = conn;
+                SQLiteHelper sh = new SQLiteHelper(cmd);
+                var sql = string.Format("select * from fcjlk3  order by ID desc limit 0,{0}", count);
+                DataTable dt = sh.Select(sql);
+
+                if (dt.Rows.Count != 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var qh = dr["qh"].ToString();
+                        var jh = dr["jh"].ToString();
+                        var dx = "";
+                        var ds = "";
+                        var colour = "";
+                        var hz = int.Parse(jh.Substring(0, 1)) + int.Parse(jh.Substring(1, 1)) + int.Parse(jh.Substring(2, 1));
+                        if (hz > 10)
+                        {
+                            dx = "大";
+                        }
+                        else
+                        {
+                            dx = "小";
+                        }
+                        if (hz % 2 != 0)
+                        {
+                            ds = "单";
+                        }
+                        else
+                        {
+                            ds = "双";
+                        }
+                        dic.Add(qh,new Number(qh, jh, dx, ds,colour));
+                        
+                    }
+
+                    //清空数据
+                    dt.Clear();
+                    //删除列 
+                    dt.Columns.Remove("ID");
+                    //dt.Columns.Remove("qh");
+                    //dt.Columns.Remove("jh");
+                    //调整列顺序 ，列排序从0开始  
+                    //dt.Columns["num"].SetOrdinal(1);
+                    //修改列标题名称  
+                    //dt.Columns["num"].ColumnName = "搜索量";
+                    //dt.Columns["rate"].ColumnName = "百分比";
+                    //dt.Columns.Add("期号");
+                    //dt.Columns.Add("奖号");
+                    dt.Columns.Add("ds");
+                    dt.Columns.Add("dx");
+                    dt.Columns.Add("colour");
+
+                    foreach (Number n in dic.Values)
+                    {
+                        //MessageBox.Show(string.Format("数组元素 {0} 出现的次数为 {1}", info.Value, info.RepeatNum));
+                        dt.Rows.Add(n.qh,n.jh,n.dx,n.ds,n.colour);
+                    }
+
+                    return dt;
+                }
+
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                DataTable dt = new DataTable();
+                return dt;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
     }
 }

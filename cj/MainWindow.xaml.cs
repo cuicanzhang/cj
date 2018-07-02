@@ -146,13 +146,19 @@ namespace cj
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (searchStr.Text.Replace(" ", "") != "")
+            {
+                showMoreDG.ItemsSource = Core.SqlAction.SelectMore(searchStr.Text.Replace(" ", "")).DefaultView;
+                showMoreDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+
+            }
             /*
             if (searchStr.Text.Replace(" ", "") != "")
             {
                 dispDG.ItemsSource = Core.SqlAction.SelectOH(searchStr.Text.Replace(" ", ""), qhCountTB.Text.Replace(" ", "")).DefaultView;
                 dispDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
             }
-             */   
+             */
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
