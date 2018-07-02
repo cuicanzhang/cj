@@ -148,8 +148,23 @@ namespace cj
         {
             if (searchStr.Text.Replace(" ", "") != "")
             {
+                config.dxd = 0;
+                config.dxx = 0;
+                config.dsd = 0;
+                config.dss = 0;
+                config.colour_blue = 0;
+                config.colour_red = 0;
+                config.colour_black = 0;
                 showMoreDG.ItemsSource = Core.SqlAction.SelectMore(searchStr.Text.Replace(" ", "")).DefaultView;
                 showMoreDG.GridLinesVisibility = DataGridGridLinesVisibility.All;
+                showMoreRT.Document.Blocks.Clear();
+                showMoreRT.AppendText("大："+config.dxd+"\n"+
+                                        "小：" + config.dxx + "\n" +
+                                        "单：" + config.dsd + "\n" +
+                                        "双：" + config.dss + "\n" +
+                                        "蓝：" + config.colour_blue + "\n" +
+                                        "红：" + config.colour_red + "\n" +
+                                        "黑：" + config.colour_black + "\n");
 
             }
             /*

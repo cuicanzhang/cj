@@ -41,5 +41,13 @@ namespace cj
             }
             return false;
         }
+        public static int checkColor(string a, string b, string c)
+        {
+            int i = 0;
+            if (a == b && a == c && a == c) { i = 3; }
+            else if ((a == b && b != c) || (a != b && b == c) || (a == c && b != c)) { i = 2; }
+            else if (int.Parse(b) - int.Parse(a) == 1 && int.Parse(c) - int.Parse(b) == 1) { i = 1; }
+            return i;
+        }
     }
 }

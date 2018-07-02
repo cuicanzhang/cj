@@ -310,22 +310,12 @@ namespace cj.Core
                         var ds = "";
                         var colour = "";
                         var hz = int.Parse(jh.Substring(0, 1)) + int.Parse(jh.Substring(1, 1)) + int.Parse(jh.Substring(2, 1));
-                        if (hz > 10)
-                        {
-                            dx = "大";
-                        }
-                        else
-                        {
-                            dx = "小";
-                        }
-                        if (hz % 2 != 0)
-                        {
-                            ds = "单";
-                        }
-                        else
-                        {
-                            ds = "双";
-                        }
+                        if (hz > 10){dx = "大";config.dxd++; }else{dx = "小"; config.dxx++; }
+                        if (hz % 2 != 0){ds = "单"; config.dsd++; } else{ds = "双"; config.dss++;}
+                        if (Tools.checkColor(jh.Substring(0, 1), jh.Substring(1, 1), jh.Substring(2, 1)) == 3) { colour = "蓝"; config.colour_blue++; }
+                            else if (Tools.checkColor(jh.Substring(0, 1), jh.Substring(1, 1), jh.Substring(2, 1)) == 2) { colour = "红"; config.colour_red++; }
+                            else if (Tools.checkColor(jh.Substring(0, 1), jh.Substring(1, 1), jh.Substring(2, 1)) == 1) { colour = "黑"; config.colour_black++; }
+                            else if (Tools.checkColor(jh.Substring(0, 1), jh.Substring(1, 1), jh.Substring(2, 1)) == 0) { colour = "黑"; config.colour_black++; }
                         dic.Add(qh,new Number(qh, jh, dx, ds,colour));
                         
                     }
